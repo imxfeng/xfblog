@@ -15,13 +15,13 @@
 <body>
 	<div class="container">
 
-	<form class="form-signin">
+	<form class="form-signin" action="<?php echo U(MODULE_NAME.'/Login/login');?>" method="post">
 		<div class="rorm-group">
 			<img src="/Public/image/imxfeng.jpg" class="img-responsive img-circle center-block" alt="">
 			<!-- <label for="username">用户名</label> -->
-			<input type="text" class="form-control" placeholder="用户名">
-			<input type="password" class="form-control" placeholder="密码">
-			<input type="text" class="form-control" placeholder="验证码">
+			<input type="text" class="form-control" name="username" placeholder="用户名">
+			<input type="password" class="form-control" name="password" placeholder="密码">
+			<input type="text" class="form-control" name="verify" placeholder="验证码">
 			<img src="<?php echo U('Verify');?>" class="verifyimg reloadverify" alt="">
 			<div class="checkbox">
 			<label>
@@ -29,8 +29,6 @@
 			</label>
 			</div>			
 		</div>
-
-		
 		<button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
 	</form>
 	</div>

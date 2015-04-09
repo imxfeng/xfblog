@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
 use Think\Controller;
+use Think\Verify;
 
 Class LoginController extends Controller{
 	Public function index(){
@@ -9,6 +10,27 @@ Class LoginController extends Controller{
 
 	//登陆表单操作
 	Public function login(){
+		if (!IS_POST) $this->error('非法请求');
+		if (!check_verify($_POST['verify'])){
+			$this->error('验证码错误！');
+		}
+		$db = M('User');
+		$user = $db->where(array('username' => I('username')))->find();
+		if(!$user || $user['password'] != I('password')){
+			$this->error('帐号或密码错误');
+		}
+		//更新最后一次登陆时间和IP
+		$data = array(
+			'id' => $user['id'],
+			'logintime' => time(),
+			'loginip' => get_client_ip()
+			);
+		$db->save($data);
+		session('uid',$user['id']);
+		session('username',$user['username']);
+		session('logintime', date('Y-m-d H:i:s', $user['logintime']));
+		session('loginip', $user['loginip']);
+		redirect(__MODULE__);
 
 	}
 
@@ -23,10 +45,6 @@ Class LoginController extends Controller{
 		$Verify->entry();
 	}
 
-	// 检测输入的验证码是否正确，$code为用户输入的验证码字符串
-	function check_verify($code, $id = ''){
-    	$verify = new \Think\Verify();
-    	return $verify->check($code, $id);
-	}
+
 
 }
